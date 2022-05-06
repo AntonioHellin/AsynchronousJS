@@ -3,7 +3,7 @@
 const btn = document.querySelector('.btn-country');
 const countriesContainer = document.querySelector('.countries');
 
-///////////////////////////////////////
+// Callback Hell
 
 const renderCountry = function (data, className = '') {
   const html = `
@@ -27,39 +27,66 @@ const renderCountry = function (data, className = '') {
   countriesContainer.style.opacity = 1;
 };
 
-const getCountryDataAndNeighbour = function (country) {
-  // AJAX call country 1
-  const request = new XMLHttpRequest();
-  // request.open('GET', 'https://restcountries.com/v3.1/name/spain');
-  request.open('GET', `https://restcountries.com/v2/name/${country}`);
-  request.send();
+///////////////////////////////////////
+// First AJAX Call: XMLHttpRequest
 
-  request.addEventListener('load', function () {
-    const [data] = JSON.parse(this.responseText);
-    console.log(data);
+// const getCountryDataAndNeighbour = function (country) {
+//   // AJAX call country 1
+//   const request = new XMLHttpRequest();
+//   // request.open('GET', 'https://restcountries.com/v3.1/name/spain');
+//   request.open('GET', `https://restcountries.com/v2/name/${country}`);
+//   request.send();
 
-    // Render country 1
-    renderCountry(data);
+//   request.addEventListener('load', function () {
+//     const [data] = JSON.parse(this.responseText);
+//     console.log(data);
 
-    // Get neighbour country
-    const [neighbour] = data.borders;
+//     // Render country 1
+//     renderCountry(data);
 
-    if (!neighbour) return;
+//     // Get neighbour country
+//     const [neighbour] = data.borders;
 
-    // AJAX call country 2
-    const request2 = new XMLHttpRequest();
-    // request.open('GET', 'https://restcountries.com/v3.1/name/spain');
-    request2.open('GET', `https://restcountries.com/v2/alpha/${neighbour}`);
-    request2.send();
+//     if (!neighbour) return;
 
-    request2.addEventListener('load', function () {
-      const data2 = JSON.parse(this.responseText);
-      console.log(data2);
+//     // AJAX call country 2
+//     const request2 = new XMLHttpRequest();
+//     // request.open('GET', 'https://restcountries.com/v3.1/name/spain');
+//     request2.open('GET', `https://restcountries.com/v2/alpha/${neighbour}`);
+//     request2.send();
 
-      renderCountry(data2, 'neighbour');
-    });
-  });
+//     request2.addEventListener('load', function () {
+//       const data2 = JSON.parse(this.responseText);
+//       console.log(data2);
+
+//       renderCountry(data2, 'neighbour');
+//     });
+//   });
+// };
+
+// // getCountryDataAndNeighbour('andorra');
+// getCountryDataAndNeighbour('usa');
+
+/*
+Promise: An object that is used an a placeholder for the future result of an asynchronous operation or, a container for an asynchronously delivered value (or future value).
+*/
+
+// const getCountryData = function (country) {
+//   fetch(`https://restcountries.com/v2/name/${country}`)
+//     .then(function (response) {
+//       console.log(response);
+//       return response.json();
+//     })
+//     .then(function (data) {
+//       console.log(data);
+//       renderCountry(data[0]);
+//     });
+// };
+
+const getCountryData = function (country) {
+  fetch(`https://restcountries.com/v2/name/${country}`)
+    .then(response => response.json())
+    .then(data => renderCountry(data[0]));
 };
 
-// getCountryDataAndNeighbour('andorra');
-getCountryDataAndNeighbour('usa');
+getCountryData('andorra');
